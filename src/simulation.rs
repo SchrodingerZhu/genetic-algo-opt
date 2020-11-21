@@ -1,12 +1,14 @@
+use std::cmp::Ordering::Equal;
+use std::time::Duration;
+
 use log::*;
+use rand::distributions::{Distribution, Uniform};
 use rand::seq::SliceRandom;
 use rayon::prelude::*;
 
 use crate::graph::Graph;
 use crate::model::Instance;
 use crate::POPULATION;
-use rand::distributions::{Distribution, Uniform};
-use std::cmp::Ordering::Equal;
 
 struct PrefixSum {
     prefix: Vec<f64>,
@@ -75,6 +77,32 @@ impl<'a> Simulation<'a> {
             })
             .collect();
         self.population = new_population;
+    }
+    pub fn start_loop(&mut self, duration: Duration) {
+        let start_time = std::time::SystemTime::now();
+        let mut round = 0_usize;
+        loop {
+            let now = std::time::SystemTime::now();
+            let used = now.duration_since(start_time).unwrap();
+            if used.lt(&duration) {
+                info!("simulation finished");
+                break;
+            }
+            if round % 100 == 0 {
+                info!("simulation round #{}, time used: {}s", round, used.as_secs());
+            }
+            self.simulate();
+        }
+        let fitness = self.fitness_vector();
+        let mut index = 0;
+        for i in 0..fitness.len() {
+            if fitness[i] < fitness[index] {
+                index = i;
+            }
+        }
+        for i in &self.population[index].gene {
+            println!("{}", i);
+        }
     }
 }
 

@@ -1,4 +1,6 @@
 use anyhow::*;
+use crate::graph::{load_raw_data, Graph};
+use std::time::Duration;
 
 mod graph;
 mod model;
@@ -19,14 +21,10 @@ pub const POPULATION : usize = 100;
 
 
 
-fn main() {
+fn main() -> Result<()> {
     pretty_env_logger::init_timed();
-    let a = model::Instance {
-        gene: vec![1, 5, 9, 2, 4, 6, 7, 8, 3, 0]
-    };
-    let b = model::Instance {
-        gene: vec![9, 0, 2, 7, 8, 6, 3, 5, 4, 1]
-    };
-    let mu = model::Instance::crossover(&a, &b);
-    println!("{:?}", mu);
+    let graph = load_raw_data("in.json")?;
+    let mut simulation = simulation::Simulation::new(&graph);
+    simulation.start_loop(Duration::from_secs(120));
+    Ok(())
 }
