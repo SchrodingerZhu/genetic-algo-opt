@@ -7,6 +7,7 @@ mod simulation;
 #[global_allocator]
 static ALLOC: snmalloc_rs::SnMalloc = snmalloc_rs::SnMalloc;
 pub const SINGLE_MUTATION_POSSIBILITY: f64 = 0.5;
+pub const INSTANCE_MUTATION_RATE: f64 = 0.05;
 pub const CROSS_OVER_LOW: usize = 10;
 pub const CROSS_OVER_HIGH: usize = 20;
 pub const PAGE_FAULT_PENALTY: f64 = 100.0;
@@ -19,6 +20,7 @@ pub const POPULATION : usize = 100;
 
 
 fn main() {
+    pretty_env_logger::init_timed();
     let a = model::Instance {
         gene: vec![1, 5, 9, 2, 4, 6, 7, 8, 3, 0]
     };

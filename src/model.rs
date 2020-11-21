@@ -6,9 +6,8 @@ pub struct Instance {
 }
 
 impl Instance {
-    pub fn mutate(&self) -> Self {
+    pub fn mutate(&mut self) {
         // use bernoulli experiment
-        let mut new = self.clone();
         let mut gen = rand::rngs::ThreadRng::default();
         while gen.gen::<f64>() < SINGLE_MUTATION_POSSIBILITY {
             // select two different pairs from the gnome
@@ -29,7 +28,7 @@ impl Instance {
                 || y1 == y2 || x2 == y2 { continue; }
 
             // now we exchange x1 <-> x2, y1 <-> y2
-            new.gene.iter_mut().for_each(|x| {
+            self.gene.iter_mut().for_each(|x| {
                 if *x == x1 {
                     *x = x2;
                 } else if *x == x2 {
@@ -41,7 +40,6 @@ impl Instance {
                 }
             });
         }
-        new
     }
 
     pub fn crossover(a: &Instance, b: &Instance) -> Self {
@@ -77,5 +75,21 @@ impl Instance {
     pub fn fitness(&self, graph: &crate::graph::Graph) -> f64 {
         //final fitness: scale factor / penalty
         unimplemented!()
+    }
+
+    pub fn mate(a : &Self, b: &Self) -> Self {
+        let mut rng = rand::thread_rng();
+        let rand : f64 = rng.gen();
+        let mut target = if rand <= 0.45 {
+            a.clone()
+        } else if rand <= 0.90 {
+            b.clone()
+        } else {
+            Instance::crossover(a, b)
+        };
+        if rng.gen::<f64>() < INSTANCE_MUTATION_RATE {
+            target.mutate();
+        }
+        target
     }
 }
