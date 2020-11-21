@@ -5,11 +5,11 @@ use rayon::prelude::*;
 use crate::graph::Graph;
 use crate::model::Instance;
 use crate::POPULATION;
+use rand::distributions::{Distribution, Uniform};
 use std::cmp::Ordering::Equal;
-use rand::distributions::{Uniform, Distribution};
 
 struct PrefixSum {
-    prefix: Vec::<f64>
+    prefix: Vec<f64>,
 }
 
 impl PrefixSum {
@@ -22,9 +22,12 @@ impl PrefixSum {
         PrefixSum { prefix }
     }
     pub fn search(&self, f: f64) -> usize {
-        match self.prefix.binary_search_by(|a| a.partial_cmp(&f).unwrap_or(Equal)) {
+        match self
+            .prefix
+            .binary_search_by(|a| a.partial_cmp(&f).unwrap_or(Equal))
+        {
             Ok(n) => n,
-            Err(e) => e - 1
+            Err(e) => e - 1,
         }
     }
     pub fn all(&self) -> f64 {
@@ -40,18 +43,15 @@ pub struct Simulation<'a> {
 impl<'a> Simulation<'a> {
     pub fn new(graph: &'a Graph) -> Self {
         let from: Vec<usize> = (0..graph.sizes.len()).collect();
-        let population = (0..POPULATION).into_par_iter()
+        let population = (0..POPULATION)
+            .into_par_iter()
             .map(|_| {
                 let mut instance = from.clone();
                 instance.as_mut_slice().shuffle(&mut rand::thread_rng());
-                Instance {
-                    gene: instance
-                }
-            }).collect();
-        Simulation {
-            graph,
-            population,
-        }
+                Instance { gene: instance }
+            })
+            .collect();
+        Simulation { graph, population }
     }
 
     pub fn fitness_vector(&self) -> Vec<f64> {
@@ -68,11 +68,12 @@ impl<'a> Simulation<'a> {
             .into_par_iter()
             .map(|_| {
                 let mut rng = rand::thread_rng();
-                let uniform : Uniform<f64> = Uniform::new(0.0, prefix_sum.all());
+                let uniform: Uniform<f64> = Uniform::new(0.0, prefix_sum.all());
                 let (f, m) = (uniform.sample(&mut rng), uniform.sample(&mut rng));
                 let (f, m) = (prefix_sum.search(f), prefix_sum.search(m));
                 Instance::mate(&self.population[f], &self.population[m])
-            }).collect();
+            })
+            .collect();
         self.population = new_population;
     }
 }

@@ -100,7 +100,7 @@ impl Instance {
 
         let (id_to_page_map, id_to_relpos_map) = generate_meta(&self.gene, &graph.sizes, PAGE_SIZE);
 
-        for ((f, t), freq) in &graph.edges {
+        for (f, t, freq) in &graph.edges {
             if id_to_page_map.get(f) != id_to_page_map.get(t) {
                 penalty += *freq as f64 * PAGE_FAULT_PENALTY;
             }
