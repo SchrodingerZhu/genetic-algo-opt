@@ -1,0 +1,17 @@
+[package]
+name = "genetic-core"
+version = "0.1.0"
+authors = ["SchrodingerZhu <i@zhuyi.fan>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+simd-json = "0.3.22"
+anyhow = "1.0.34"
+snmalloc-rs = "0.2.21"
+rand = "0.7.3"
+rand_distr = "0.3.0"
+statrs = "0.13.0"
+serde = "*"
+hashbrown = { version = "0.9.1", features = ["default", "nightly"] }
