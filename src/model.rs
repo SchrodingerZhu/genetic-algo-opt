@@ -76,5 +76,6 @@ impl Instance {
 
     pub fn fitness(&self, graph: &crate::graph::Graph) -> f64 {
         //final fitness: scale factor / penalty
+        unimplemented!()
     }
 }

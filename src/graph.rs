@@ -3,8 +3,8 @@ use std::path::Path;
 use hashbrown::{HashMap, HashSet};
 
 pub struct Graph {
-    sizes: Vec<usize>,
-    edges: hashbrown::HashMap<(usize, usize), usize>,
+    pub(crate) sizes: Vec<usize>,
+    pub(crate) edges: hashbrown::HashMap<(usize, usize), usize>,
 }
 
 #[derive(serde::Deserialize)]
