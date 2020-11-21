@@ -55,7 +55,10 @@ impl<'a> Simulation<'a> {
     }
 
     pub fn fitness_vector(&self) -> Vec<f64> {
-        unimplemented!()
+        self.population
+            .iter()
+            .map(|x| return x.fitness(self.graph))
+            .collect()
     }
 
     pub fn simulate(&mut self) {
