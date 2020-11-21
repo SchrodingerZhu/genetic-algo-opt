@@ -14,7 +14,7 @@ pub const CACHE_MISS_PENALTY: f64 = 50.0;
 pub const SCALE_FACTOR: f64 = 10000.0;
 pub const ICACHE_SIZE: usize = 256;
 pub const PAGE_SIZE: usize = 2048 * 1024;
-
+pub const POPULATION : usize = 100;
 
 
 
