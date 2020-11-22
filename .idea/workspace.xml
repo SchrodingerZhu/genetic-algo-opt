@@ -14,7 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8cefc1ca-85f4-497a-9554-5edba2cf8c7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graph.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/graph.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/simulation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/simulation.rs" afterDir="false" />
@@ -53,7 +52,12 @@
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager" selected="Cargo.Test simulation::test::test_prefix_sum">
+  <component name="RunManager" selected="Cargo.Run genetic-core">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run genetic-core" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run --package genetic-core --bin genetic-core" />
@@ -80,8 +84,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Cargo.Test simulation::test::test_prefix_sum" />
         <item itemvalue="Cargo.Run genetic-core" />
+        <item itemvalue="Cargo.Test simulation::test::test_prefix_sum" />
       </list>
     </recent_temporary>
   </component>
@@ -106,6 +110,22 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/simulation.rs</url>
+          <line>67</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/model.rs</url>
+          <line>96</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -9,6 +9,7 @@ use rayon::prelude::*;
 use crate::graph::Graph;
 use crate::model::Instance;
 use crate::POPULATION;
+use statrs::statistics::Statistics;
 
 struct PrefixSum {
     prefix: Vec<f64>,
@@ -63,7 +64,7 @@ impl<'a> Simulation<'a> {
             .collect()
     }
 
-    pub fn simulate(&mut self) {
+    pub fn simulate(&mut self) -> f64 {
         let fitness = self.fitness_vector();
         let prefix_sum = PrefixSum::new(&fitness);
         let new_population = (0..POPULATION)
@@ -77,6 +78,7 @@ impl<'a> Simulation<'a> {
             })
             .collect();
         self.population = new_population;
+        fitness.max()
     }
     pub fn start_loop(&mut self, duration: Duration) {
         let start_time = std::time::SystemTime::now();
@@ -88,16 +90,16 @@ impl<'a> Simulation<'a> {
                 info!("simulation finished");
                 break;
             }
+            let max_fit = self.simulate();
             if round % 100 == 0 {
-                info!("simulation round #{}, time used: {}s", round, used.as_secs());
+                info!("simulation round #{}, time used: {}s, max_fit: {}", round, used.as_secs(), max_fit);
             }
-            self.simulate();
             round = round + 1;
         }
         let fitness = self.fitness_vector();
         let mut index = 0;
         for i in 0..fitness.len() {
-            if fitness[i] < fitness[index] {
+            if fitness[i] > fitness[index] {
                 index = i;
             }
         }

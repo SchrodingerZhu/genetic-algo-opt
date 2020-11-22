@@ -1,5 +1,8 @@
 use crate::*;
 use rand::Rng;
+use rand::distributions::Distribution;
+use rand_distr::num_traits::abs_sub;
+
 #[derive(Clone, Debug)]
 pub struct Instance {
     pub(crate) gene: Vec<usize>,
@@ -7,26 +10,18 @@ pub struct Instance {
 
 fn generate_meta(
     gene: &[usize],
-    sizes: &[usize],
-    pgsize: usize,
-) -> (
-    hashbrown::HashMap<usize, usize>,
-    hashbrown::HashMap<usize, usize>,
-) {
-    let mut ret1 = hashbrown::HashMap::<usize, usize>::new();
-    let mut ret2 = hashbrown::HashMap::<usize, usize>::new();
-    let mut page_id = 0;
+    sizes: &[usize]
+) ->
+    Vec<usize>
+{
+    let mut ret1 = Vec::with_capacity(gene.len());
     let mut curr_byte = 0;
+    ret1.resize(gene.len(), 0);
     for i in gene {
-        ret1.insert(*i, page_id);
-        ret2.insert(*i, curr_byte);
+        ret1[*i] = curr_byte;
         curr_byte += sizes[*i];
-        if curr_byte > pgsize {
-            page_id += 1;
-            curr_byte -= pgsize;
-        }
     }
-    (ret1, ret2)
+    ret1
 }
 
 impl Instance {
@@ -102,25 +97,30 @@ impl Instance {
         //final fitness: scale factor / penalty
         let mut penalty = 0f64;
 
-        let (id_to_page_map, id_to_relpos_map) = generate_meta(&self.gene, &graph.sizes, PAGE_SIZE);
+        let locations = generate_meta(&self.gene, &graph.sizes);
 
         for (f, t, freq) in &graph.edges {
-            if id_to_page_map.get(f) != id_to_page_map.get(t) {
+            if locations[*f] / PAGE_SIZE != locations[*t] / PAGE_SIZE {
                 penalty += *freq as f64 * PAGE_FAULT_PENALTY;
             }
-            if id_to_relpos_map.get(f) != id_to_relpos_map.get(t) {
+            if locations[*f] / ICACHE_SIZE != locations[*t] / ICACHE_SIZE  {
                 penalty += *freq as f64 * CACHE_MISS_PENALTY;
             }
+            if locations[*f] / ICACHE_SIZE < locations[*t] / ICACHE_SIZE  {
+                penalty += *freq as f64 * ORDER_PENALTY;
+            }
+            penalty += DISTANCE_PENALTY * (*freq as f64) * abs_sub(locations[*f] as f64, locations[*t] as f64) ;
         }
         SCALE_FACTOR / penalty
     }
 
     pub fn mate(a: &Self, b: &Self) -> Self {
         let mut rng = rand::thread_rng();
-        let rand: f64 = rng.gen();
-        let mut target = if rand <= 0.45 {
+        let mut dist = rand::distributions::Uniform::new(0.0, 1.0);
+        let rand = dist.sample(&mut rng);
+        let mut target = if rand <= 0.49 {
             a.clone()
-        } else if rand <= 0.90 {
+        } else if rand <= 0.98 {
             b.clone()
         } else {
             Instance::crossover(a, b)
