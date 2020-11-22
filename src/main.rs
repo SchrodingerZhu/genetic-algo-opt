@@ -1,6 +1,7 @@
 use anyhow::*;
 use structopt::StructOpt;
 use crate::graph::load_raw_data;
+use std::path::PathBuf;
 
 mod graph;
 mod model;
@@ -39,6 +40,8 @@ pub struct Conf {
     pub log_factor: usize,
     #[structopt(long, short = "g", default_value = "INFO", env = "SIM_LOG_LEVEL")]
     pub log_level: String,
+    #[structopt(long)]
+    pub input: PathBuf,
 }
 
 
@@ -46,7 +49,7 @@ fn main() -> Result<()> {
     let conf = Conf::from_args();
     std::env::set_var("SIM_LOG_LEVEL", &conf.log_level);
     pretty_env_logger::try_init_timed_custom_env("SIM_LOG_LEVEL")?;
-    let graph = load_raw_data("in.json")?;
+    let graph = load_raw_data(&conf.input)?;
     let mut simulation = simulation::Simulation::new(&graph, conf);
     simulation.start_loop();
     Ok(())
