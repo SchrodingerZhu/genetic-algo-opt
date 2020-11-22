@@ -42,6 +42,8 @@ pub struct Conf {
     pub log_level: String,
     #[structopt(long)]
     pub input: PathBuf,
+    #[structopt(long)]
+    pub output: PathBuf,
 }
 
 

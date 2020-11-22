@@ -116,9 +116,16 @@ impl<'a> Simulation<'a> {
                 index = i;
             }
         }
-        for i in &self.population[index].gene {
-            println!("{}", i);
-        }
+        simd_json::to_string(&self.population[index].gene)
+            .map_err(Into::<anyhow::Error>::into)
+            .and_then(|x| {
+                std::fs::write(&self.conf.output, x)
+                    .map_err(Into::into)
+            })
+            .unwrap_or_else(|e| {
+                error!("failed to write to file: {}", e)
+            })
+
     }
 }
 
