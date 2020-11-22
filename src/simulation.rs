@@ -8,7 +8,7 @@ use rayon::prelude::*;
 
 use crate::graph::Graph;
 use crate::model::Instance;
-use crate::POPULATION;
+use crate::Conf;
 
 use statrs::statistics::Statistics;
 
@@ -42,12 +42,13 @@ impl PrefixSum {
 pub struct Simulation<'a> {
     graph: &'a Graph,
     population: Vec<Instance>,
+    conf: crate::Conf,
 }
 
 impl<'a> Simulation<'a> {
-    pub fn new(graph: &'a Graph) -> Self {
+    pub fn new(graph: &'a Graph, conf: Conf) -> Self {
         let from: Vec<usize> = (0..graph.sizes.len()).collect();
-        let population = (0..POPULATION)
+        let population = (0..conf.population)
             .into_par_iter()
             .map(|_| {
                 let mut instance = from.clone();
@@ -55,35 +56,46 @@ impl<'a> Simulation<'a> {
                 Instance { gene: instance }
             })
             .collect();
-        Simulation { graph, population }
+        Simulation { graph, population, conf }
     }
 
     pub fn fitness_vector(&self) -> Vec<f64> {
         self.population
             .iter()
-            .map(|x| return x.fitness(self.graph))
+            .map(|x| return x.fitness(self.graph,
+                                      self.conf.page_size,
+                                      self.conf.icache_size,
+                                      self.conf.page_fault_penalty,
+                                      self.conf.cache_miss_penalty,
+                                      self.conf.distance_penalty,
+                                      self.conf.order_penalty,
+                                      self.conf.scale_factor))
             .collect()
     }
 
     pub fn simulate(&mut self) -> f64 {
         let fitness = self.fitness_vector();
         let prefix_sum = PrefixSum::new(&fitness);
-        let new_population = (0..POPULATION)
+        let new_population = (0..self.conf.population)
             .into_par_iter()
             .map(|_| {
                 let mut rng = rand::thread_rng();
                 let uniform: Uniform<f64> = Uniform::new(0.0, prefix_sum.all());
                 let (f, m) = (uniform.sample(&mut rng), uniform.sample(&mut rng));
                 let (f, m) = (prefix_sum.search(f), prefix_sum.search(m));
-                Instance::mate(&self.population[f], &self.population[m])
+                Instance::mate(&self.population[f], &self.population[m],
+                               self.conf.cross_over_possibility,
+                               self.conf.instance_mutation_rate,
+                               self.conf.single_mutation_possibility)
             })
             .collect();
         self.population = new_population;
         fitness.max()
     }
-    pub fn start_loop(&mut self, duration: Duration) {
+    pub fn start_loop(&mut self) {
         let start_time = std::time::SystemTime::now();
         let mut round = 0_usize;
+        let duration = Duration::from_secs(self.conf.simulation_time as u64);
         loop {
             let now = std::time::SystemTime::now();
             let used = now.duration_since(start_time).unwrap();
@@ -92,7 +104,7 @@ impl<'a> Simulation<'a> {
                 break;
             }
             let max_fit = self.simulate();
-            if round % 100 == 0 {
+            if round % self.conf.log_factor == 0 {
                 info!("simulation round #{}, time used: {}s, max_fit: {}", round, used.as_secs(), max_fit);
             }
             round = round + 1;
@@ -101,32 +113,6 @@ impl<'a> Simulation<'a> {
         let mut index = 0;
         for i in 0..fitness.len() {
             if fitness[i] > fitness[index] {
-                index = i;
-            }
-        }
-        for i in &self.population[index].gene {
-            println!("{}", i);
-        }
-    }
-    pub fn start_loop(&mut self, duration: Duration) {
-        let start_time = std::time::SystemTime::now();
-        let mut round = 0_usize;
-        loop {
-            let now = std::time::SystemTime::now();
-            let used = now.duration_since(start_time).unwrap();
-            if used.lt(&duration) {
-                info!("simulation finished");
-                break;
-            }
-            if round % 100 == 0 {
-                info!("simulation round #{}, time used: {}s", round, used.as_secs());
-            }
-            self.simulate();
-        }
-        let fitness = self.fitness_vector();
-        let mut index = 0;
-        for i in 0..fitness.len() {
-            if fitness[i] < fitness[index] {
                 index = i;
             }
         }

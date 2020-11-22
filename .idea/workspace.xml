@@ -14,7 +14,10 @@
   <component name="ChangeListManager">
     <list default="true" id="8cefc1ca-85f4-497a-9554-5edba2cf8c7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/simulation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/simulation.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -115,13 +118,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/simulation.rs</url>
-          <line>67</line>
+          <line>76</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/model.rs</url>
-          <line>96</line>
-          <option name="timeStamp" value="3" />
+          <line>108</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

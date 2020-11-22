@@ -1,7 +1,6 @@
-use crate::*;
 use rand::Rng;
 use rand::distributions::Distribution;
-use rand_distr::num_traits::abs_sub;
+use rand_distr::num_traits::abs;
 
 #[derive(Clone, Debug)]
 pub struct Instance {
@@ -10,7 +9,7 @@ pub struct Instance {
 
 fn generate_meta(
     gene: &[usize],
-    sizes: &[usize]
+    sizes: &[usize],
 ) ->
     Vec<usize>
 {
@@ -25,11 +24,11 @@ fn generate_meta(
 }
 
 impl Instance {
-    pub fn mutate(&mut self) {
+    pub fn mutate(&mut self, possibility: f64) {
         // use bernoulli experiment
         let mut gen = rand::rngs::ThreadRng::default();
         let mut counter = 0usize;
-        while gen.gen::<f64>() < SINGLE_MUTATION_POSSIBILITY {
+        while gen.gen::<f64>() < possibility {
             counter += 1;
             // select two different pairs from the gnome
             let mut x1: usize = gen.gen::<usize>() % self.gene.len();
@@ -93,40 +92,40 @@ impl Instance {
         Instance { gene }
     }
 
-    pub fn fitness(&self, graph: &crate::graph::Graph) -> f64 {
+    pub fn fitness(&self, graph: &crate::graph::Graph, page_size: usize, cache_size: usize, page_fault: f64, cache_miss: f64, distance: f64, order: f64, scale_factor: f64) -> f64 {
         //final fitness: scale factor / penalty
         let mut penalty = 0f64;
 
         let locations = generate_meta(&self.gene, &graph.sizes);
 
         for (f, t, freq) in &graph.edges {
-            if locations[*f] / PAGE_SIZE != locations[*t] / PAGE_SIZE {
-                penalty += *freq as f64 * PAGE_FAULT_PENALTY;
+            if locations[*f] / page_size != locations[*t] / page_size {
+                penalty += *freq as f64 * page_fault;
             }
-            if locations[*f] / ICACHE_SIZE != locations[*t] / ICACHE_SIZE  {
-                penalty += *freq as f64 * CACHE_MISS_PENALTY;
+            if locations[*f] / cache_size != locations[*t] / cache_size {
+                penalty += *freq as f64 * cache_miss;
             }
-            if locations[*f] / ICACHE_SIZE < locations[*t] / ICACHE_SIZE  {
-                penalty += *freq as f64 * ORDER_PENALTY;
+            if locations[*f] > locations[*t] {
+                penalty += *freq as f64 * order;
             }
-            penalty += DISTANCE_PENALTY * (*freq as f64) * abs_sub(locations[*f] as f64, locations[*t] as f64) ;
+            penalty += distance * (*freq as f64) * abs(locations[*f] as f64 - locations[*t] as f64);
         }
-        SCALE_FACTOR / penalty
+        scale_factor / penalty
     }
 
-    pub fn mate(a: &Self, b: &Self) -> Self {
+    pub fn mate(a: &Self, b: &Self, cross_over: f64, mutation: f64, single_mutation: f64) -> Self {
         let mut rng = rand::thread_rng();
-        let mut dist = rand::distributions::Uniform::new(0.0, 1.0);
+        let dist = rand::distributions::Uniform::new(0.0, 1.0);
         let rand = dist.sample(&mut rng);
-        let mut target = if rand <= 0.49 {
+        let mut target = if rand <= (1.0 - cross_over) / 2.0 {
             a.clone()
-        } else if rand <= 0.98 {
+        } else if rand <= (1.0 - cross_over) {
             b.clone()
         } else {
             Instance::crossover(a, b)
         };
-        if rng.gen::<f64>() < INSTANCE_MUTATION_RATE {
-            target.mutate();
+        if rng.gen::<f64>() < mutation {
+            target.mutate(single_mutation);
         }
         target
     }
