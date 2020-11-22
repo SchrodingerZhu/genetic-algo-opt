@@ -84,7 +84,7 @@ impl<'a> Simulation<'a> {
         loop {
             let now = std::time::SystemTime::now();
             let used = now.duration_since(start_time).unwrap();
-            if used.lt(&duration) {
+            if used.ge(&duration) {
                 info!("simulation finished");
                 break;
             }
@@ -92,6 +92,7 @@ impl<'a> Simulation<'a> {
                 info!("simulation round #{}, time used: {}s", round, used.as_secs());
             }
             self.simulate();
+            round = round + 1;
         }
         let fitness = self.fitness_vector();
         let mut index = 0;

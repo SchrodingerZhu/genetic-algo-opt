@@ -33,7 +33,9 @@ impl Instance {
     pub fn mutate(&mut self) {
         // use bernoulli experiment
         let mut gen = rand::rngs::ThreadRng::default();
+        let mut counter = 0usize;
         while gen.gen::<f64>() < SINGLE_MUTATION_POSSIBILITY {
+            counter += 1;
             // select two different pairs from the gnome
             let mut x1: usize = gen.gen::<usize>() % self.gene.len();
             let mut y1: usize = gen.gen::<usize>() % self.gene.len();
@@ -64,9 +66,11 @@ impl Instance {
                 }
             });
         }
+        log::trace!("mutation happened with {} changes", counter);
     }
 
     pub fn crossover(a: &Instance, b: &Instance) -> Self {
+        log::trace!("crossover happened");
         // 0 4 1 5 6 3 2
         // 5 6 0 4 1 2 3
         let mut gene = Vec::new();

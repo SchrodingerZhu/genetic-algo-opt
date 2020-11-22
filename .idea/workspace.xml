@@ -14,7 +14,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8cefc1ca-85f4-497a-9554-5edba2cf8c7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graph.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/graph.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/simulation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/simulation.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,11 +78,6 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Cargo.Test simulation::test::test_prefix_sum" />
@@ -103,6 +100,7 @@
       <workItem from="1605943605987" duration="240000" />
       <workItem from="1605943860423" duration="300000" />
       <workItem from="1605944181134" duration="10349000" />
+      <workItem from="1606012445696" duration="9000" />
     </task>
     <servers />
   </component>
