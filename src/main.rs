@@ -32,8 +32,10 @@ pub struct Conf {
     pub icache_size: usize,
     #[structopt(long, short, default_value = "4096")]
     pub page_size: usize,
-    #[structopt(long, short = "k", default_value = "500")]
+    #[structopt(long, short = "k", default_value = "1000")]
     pub population: usize,
+    #[structopt(long, short = "u", default_value = "500")]
+    pub originals: usize,
     #[structopt(long, short = "t", default_value = "60")]
     pub simulation_time: usize,
     #[structopt(long, short, default_value = "100")]

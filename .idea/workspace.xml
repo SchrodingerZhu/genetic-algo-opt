@@ -14,8 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8cefc1ca-85f4-497a-9554-5edba2cf8c7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/simulation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/simulation.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,11 +50,6 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunManager" selected="Cargo.Run genetic-core">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Run genetic-core" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run --package genetic-core --bin genetic-core" />
@@ -104,6 +97,9 @@
       <workItem from="1605943860423" duration="300000" />
       <workItem from="1605944181134" duration="10349000" />
       <workItem from="1606012445696" duration="9000" />
+      <workItem from="1607249322789" duration="1804000" />
+      <workItem from="1610436813804" duration="31000" />
+      <workItem from="1611301310883" duration="969000" />
     </task>
     <servers />
   </component>

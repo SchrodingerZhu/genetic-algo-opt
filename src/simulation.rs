@@ -48,14 +48,17 @@ pub struct Simulation<'a> {
 impl<'a> Simulation<'a> {
     pub fn new(graph: &'a Graph, conf: Conf) -> Self {
         let from: Vec<usize> = (0..graph.sizes.len()).collect();
-        let population = (0..conf.population)
+        let mut population = (0..conf.population - conf.originals)
             .into_par_iter()
             .map(|_| {
                 let mut instance = from.clone();
                 instance.as_mut_slice().shuffle(&mut rand::thread_rng());
                 Instance { gene: instance }
             })
-            .collect();
+            .collect::<Vec<_>>();
+        for _ in 0..conf.originals {
+            population.push( Instance { gene: from.clone() } );
+        }
         Simulation { graph, population, conf }
     }
 
